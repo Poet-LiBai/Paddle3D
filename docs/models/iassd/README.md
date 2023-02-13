@@ -127,12 +127,16 @@ KITTI
 #### 2）训练
 
 ```shell
+# 挂载数据到内存
+mkdir /data/polarstar/kitti
+sudo mount tmpfs /data/polarstar/kitti -t tmpfs -o size=80G
+cd /data/polarstar/kitti_ssd | cp -r ./* /data/polarstar/kitti
 # 单卡训练
 python tools/train.py --config configs/iassd/iassd_kitti.yaml --save_interval 1 --num_workers 4 --save_dir outputs/iassd_kitti
 
 # 多卡训练，每隔1个epoch保存模型至save_dir
 export CUDA_VISIBLE_DEVICES=0,1,2,3
-fleetrun tools/train.py --config configs/iassd/iassd_kitti.yaml --save_interval 1 --num_workers 4 --save_dir outputs/iassd_kitti
+fleetrun tools/train.py --config configs/iassd/iassd_kitti.yaml --save_interval 1 --num_workers 2 --save_dir outputs/iassd_kitti
 ```
 
 训练启动参数介绍可参考文档[全流程速览](../../quickstart.md#模型训练)。

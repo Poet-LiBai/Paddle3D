@@ -264,7 +264,7 @@ class Trainer:
             if not paddle.distributed.parallel.parallel_helper._is_parallel_ctx_initialized(
             ):
                 paddle.distributed.init_parallel_env()
-            model = paddle.DataParallel(self.model)
+            model = paddle.DataParallel(self.model, find_unused_parameters=True)
 
         losses_sum = defaultdict(float)
         timer = Timer(iters=self.iters - self.cur_iter)

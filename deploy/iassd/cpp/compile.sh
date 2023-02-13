@@ -22,13 +22,15 @@ WITH_MKL=ON
 WITH_GPU=ON
 USE_TENSORRT=ON
 
-LIB_DIR=/workspace/Paddle3D/deploy/iassd/cpp/paddle_inference
-CUDNN_LIB=/usr/lib/x86_64-linux-gnu
+LIB_DIR=/usr/local/paddle_inference
+CUDNN_LIB=/usr/local/cuda/lib64
 CUDA_LIB=/usr/local/cuda/lib64
-TENSORRT_ROOT=/workspace/TensorRT-8.2.5.1
+TENSORRT_ROOT=/usr/local/tensorrt
 CUSTOM_OPERATOR_FILES="custom_ops/ball_query_gpu.cu;custom_ops/ball_query.cc;\
+custom_ops/ball_query_gpu_batch.cu;custom_ops/ball_query_batch.cc;\
 custom_ops/gather_points_gpu.cu;custom_ops/gather_points.cc;\
 custom_ops/group_points_gpu.cu;custom_ops/group_points.cc;\
+custom_ops/group_points_gpu_batch.cu;custom_ops/group_points_batch.cc;\
 custom_ops/sampling_gpu.cu;custom_ops/sampling.cc;\
 custom_ops/iou3d_cpu.cpp;custom_ops/iou3d_nms_api.cpp;custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_kernel.cu"
 

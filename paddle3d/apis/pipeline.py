@@ -40,9 +40,14 @@ def training_step(model: paddle.nn.Layer,
         optimizer.before_iter(cur_iter - 1)
 
     model.train()
+    # print('*******************************')
+    # print(isinstance(model, paddle.DataParallel))
+    # print(hasattr(model._layers, 'use_recompute'))
+    #print(model._layers.use_recompute)
 
-    if isinstance(model, paddle.DataParallel) and hasattr(model._layers, 'use_recompute') \
-        and model._layers.use_recompute:
+    # if isinstance(model, paddle.DataParallel) and hasattr(model._layers, 'use_recompute') \
+    #     and model._layers.use_recompute:
+    if isinstance(model, paddle.DataParallel):
         with model.no_sync():
             if scaler is not None:
                 with paddle.amp.auto_cast(**amp_cfg):

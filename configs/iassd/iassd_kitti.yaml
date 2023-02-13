@@ -5,7 +5,7 @@ train_dataset:
   type: KittiPCDataset
   dataset_root: datasets/KITTI
   class_names: [ "Car", "Pedestrian", "Cyclist"]
-  use_road_plane: True
+  use_road_plane: False
   transforms:
     - type: LoadPointCloud
       dim: 4
@@ -136,7 +136,7 @@ optimizer:
 
 lr_scheduler:
   type: OneCycle
-  total_step: 9280  #change to your correspondent total iter
+  total_step: 37120 #offical 9280  #change to your correspondent total iter
   lr_max: 0.01
   moms: [0.95, 0.85]
   div_factor: 10

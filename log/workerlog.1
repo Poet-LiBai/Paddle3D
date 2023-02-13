@@ -1,0 +1,4717 @@
+2023-02-09 16:57:45,186 -     INFO - Load 2207 Pedestrian database infos
+2023-02-09 16:57:45,187 -     INFO - Load 14357 Car database infos
+2023-02-09 16:57:45,189 -     INFO - Load 734 Cyclist database infos
+2023-02-09 16:57:45,189 -     INFO - After filtering min_num_points_in_box:
+2023-02-09 16:57:45,189 -     INFO - Load 2161 Pedestrian database infos
+2023-02-09 16:57:45,189 -     INFO - Load 13442 Car database infos
+2023-02-09 16:57:45,189 -     INFO - Load 699 Cyclist database infos
+2023-02-09 16:57:45,209 -     INFO - After filtering ignored difficulty:
+2023-02-09 16:57:45,209 -     INFO - Load 2066 Pedestrian database infos
+2023-02-09 16:57:45,209 -     INFO - Load 10520 Car database infos
+2023-02-09 16:57:45,209 -     INFO - Load 580 Cyclist database infos
+2023-02-09 16:57:45,360 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8101
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-09 16:57:45,375 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0209 16:57:45.380578  2082 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0209 16:57:45.380605  2082 gpu_resources.cc:91] device: 1, cuDNN Version: 8.1.
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 196, in main
+    trainer = Trainer(**dic)
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 195, in __init__
+    raise RuntimeError(
+RuntimeError: The checkpoint outputs/iassd_kitti is not emtpy! Set `resume=True` to continue training or use another dir as checkpoint
+2023-02-09 16:58:21,730 -     INFO - Load 2207 Pedestrian database infos
+2023-02-09 16:58:21,730 -     INFO - Load 14357 Car database infos
+2023-02-09 16:58:21,733 -     INFO - Load 734 Cyclist database infos
+2023-02-09 16:58:21,733 -     INFO - After filtering min_num_points_in_box:
+2023-02-09 16:58:21,733 -     INFO - Load 2161 Pedestrian database infos
+2023-02-09 16:58:21,733 -     INFO - Load 13442 Car database infos
+2023-02-09 16:58:21,733 -     INFO - Load 699 Cyclist database infos
+2023-02-09 16:58:21,752 -     INFO - After filtering ignored difficulty:
+2023-02-09 16:58:21,752 -     INFO - Load 2066 Pedestrian database infos
+2023-02-09 16:58:21,752 -     INFO - Load 10520 Car database infos
+2023-02-09 16:58:21,752 -     INFO - Load 580 Cyclist database infos
+2023-02-09 16:58:21,816 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8101
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-09 16:58:21,827 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0209 16:58:21.830560  2911 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0209 16:58:21.830602  2911 gpu_resources.cc:91] device: 1, cuDNN Version: 8.1.
+I0209 16:58:22.994990  2911 tcp_utils.cc:107] Retry to connect to 127.0.1.1:60577 while the server is not yet listening.
+I0209 16:58:25.995170  2911 tcp_utils.cc:130] Successfully connected to 127.0.1.1:60577
+2023-02-09 16:58:31,070 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-09 16:58:32,539 -     INFO - pointnet2_ops builded success!
+W0209 16:58:32.808795  2911 gpu_resources.cc:217] WARNING: device: . The installed Paddle is compiled with CUDNN 8.2, but CUDNN version in your machine is 8.1, which may cause serious incompatible bug. Please recompile or reinstall Paddle with compatible CUDNN version.
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-09 16:58:36,405 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0209 16:58:39.208781  2911 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0209 16:58:39.208820  2911 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0209 16:58:39.208828  2911 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0209 16:58:39.208834  2911 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0209 16:58:39.208840  2911 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0209 16:58:39.208846  2911 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0209 16:58:39.208853  2911 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-09 16:58:39,227 -     INFO - roiaware_pool3d builded success!
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 66, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-09 17:15:37,349 -     INFO - Load 2207 Pedestrian database infos
+2023-02-09 17:15:37,349 -     INFO - Load 14357 Car database infos
+2023-02-09 17:15:37,351 -     INFO - Load 734 Cyclist database infos
+2023-02-09 17:15:37,351 -     INFO - After filtering min_num_points_in_box:
+2023-02-09 17:15:37,352 -     INFO - Load 2161 Pedestrian database infos
+2023-02-09 17:15:37,352 -     INFO - Load 13442 Car database infos
+2023-02-09 17:15:37,352 -     INFO - Load 699 Cyclist database infos
+2023-02-09 17:15:37,371 -     INFO - After filtering ignored difficulty:
+2023-02-09 17:15:37,371 -     INFO - Load 2066 Pedestrian database infos
+2023-02-09 17:15:37,371 -     INFO - Load 10520 Car database infos
+2023-02-09 17:15:37,371 -     INFO - Load 580 Cyclist database infos
+2023-02-09 17:15:37,438 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-09 17:15:37,448 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0209 17:15:37.451849 25921 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0209 17:15:37.451870 25921 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0209 17:15:38.666329 25921 tcp_utils.cc:107] Retry to connect to 127.0.1.1:60363 while the server is not yet listening.
+I0209 17:15:41.666649 25921 tcp_utils.cc:130] Successfully connected to 127.0.1.1:60363
+2023-02-09 17:15:46,797 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-09 17:15:49,699 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-09 17:15:51,908 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0209 17:15:53.448284 25921 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0209 17:15:53.448320 25921 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0209 17:15:53.448329 25921 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0209 17:15:53.448336 25921 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0209 17:15:53.448343 25921 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0209 17:15:53.448348 25921 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0209 17:15:53.448355 25921 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-09 17:15:53,461 -     INFO - roiaware_pool3d builded success!
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 66, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-09 17:31:09,075 -     INFO - Load 2207 Pedestrian database infos
+2023-02-09 17:31:09,076 -     INFO - Load 14357 Car database infos
+2023-02-09 17:31:09,078 -     INFO - Load 734 Cyclist database infos
+2023-02-09 17:31:09,078 -     INFO - After filtering min_num_points_in_box:
+2023-02-09 17:31:09,078 -     INFO - Load 2161 Pedestrian database infos
+2023-02-09 17:31:09,078 -     INFO - Load 13442 Car database infos
+2023-02-09 17:31:09,078 -     INFO - Load 699 Cyclist database infos
+2023-02-09 17:31:09,097 -     INFO - After filtering ignored difficulty:
+2023-02-09 17:31:09,097 -     INFO - Load 2066 Pedestrian database infos
+2023-02-09 17:31:09,098 -     INFO - Load 10520 Car database infos
+2023-02-09 17:31:09,098 -     INFO - Load 580 Cyclist database infos
+2023-02-09 17:31:09,165 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-09 17:31:09,177 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0209 17:31:09.181632 10972 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0209 17:31:09.181664 10972 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0209 17:31:10.399457 10972 tcp_utils.cc:130] Successfully connected to 127.0.1.1:39324
+2023-02-09 17:31:15,514 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-09 17:31:16,954 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-09 17:31:19,143 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0209 17:31:20.656258 10972 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0209 17:31:20.656286 10972 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0209 17:31:20.656292 10972 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0209 17:31:20.656296 10972 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0209 17:31:20.656301 10972 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0209 17:31:20.656306 10972 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0209 17:31:20.656309 10972 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-09 17:31:20,668 -     INFO - roiaware_pool3d builded success!
+W0209 17:31:20.938064 10972 reducer.cc:622] All parameters are involved in the backward pass. It is recommended to set find_unused_parameters to False to improve performance. However, if unused parameters appear in subsequent iterative training, then an error will occur. Please make it clear that in the subsequent training, there will be no parameters that are not used in the backward pass, and then set find_unused_parameters
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 66, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-09 17:41:47,420 -     INFO - Load 2207 Pedestrian database infos
+2023-02-09 17:41:47,420 -     INFO - Load 14357 Car database infos
+2023-02-09 17:41:47,423 -     INFO - Load 734 Cyclist database infos
+2023-02-09 17:41:47,423 -     INFO - After filtering min_num_points_in_box:
+2023-02-09 17:41:47,423 -     INFO - Load 2161 Pedestrian database infos
+2023-02-09 17:41:47,423 -     INFO - Load 13442 Car database infos
+2023-02-09 17:41:47,423 -     INFO - Load 699 Cyclist database infos
+2023-02-09 17:41:47,441 -     INFO - After filtering ignored difficulty:
+2023-02-09 17:41:47,442 -     INFO - Load 2066 Pedestrian database infos
+2023-02-09 17:41:47,442 -     INFO - Load 10520 Car database infos
+2023-02-09 17:41:47,442 -     INFO - Load 580 Cyclist database infos
+2023-02-09 17:41:47,518 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-09 17:41:47,529 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0209 17:41:47.532622   913 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0209 17:41:47.532647   913 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0209 17:41:48.782856   913 tcp_utils.cc:107] Retry to connect to 127.0.1.1:53876 while the server is not yet listening.
+I0209 17:41:51.783067   913 tcp_utils.cc:130] Successfully connected to 127.0.1.1:53876
+2023-02-09 17:41:58,331 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-09 17:42:00,840 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-09 17:42:03,187 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0209 17:42:04.752377   913 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0209 17:42:04.752416   913 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0209 17:42:04.752424   913 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0209 17:42:04.752429   913 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0209 17:42:04.752434   913 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0209 17:42:04.752437   913 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0209 17:42:04.752442   913 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-09 17:42:04,765 -     INFO - roiaware_pool3d builded success!
+W0209 17:42:05.041350   913 reducer.cc:622] All parameters are involved in the backward pass. It is recommended to set find_unused_parameters to False to improve performance. However, if unused parameters appear in subsequent iterative training, then an error will occur. Please make it clear that in the subsequent training, there will be no parameters that are not used in the backward pass, and then set find_unused_parameters
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 66, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-10 19:05:26,828 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:05:26,828 -     INFO - Load 14357 Car database infos
+2023-02-10 19:05:26,830 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:05:26,831 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:05:26,831 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:05:26,831 -     INFO - Load 13442 Car database infos
+2023-02-10 19:05:26,831 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:05:26,849 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:05:26,850 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:05:26,850 -     INFO - Load 10520 Car database infos
+2023-02-10 19:05:26,850 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:05:26,924 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:05:26,953 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:05:26.958653 32448 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:05:26.958683 32448 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:05:28.164728 32448 tcp_utils.cc:130] Successfully connected to 127.0.1.1:46514
+2023-02-10 19:05:32,834 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:05:35,681 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:05:37,874 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:05:39.388370 32448 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:05:39.388404 32448 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:05:39.388410 32448 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:05:39.388415 32448 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:05:39.388419 32448 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:05:39.388423 32448 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:05:39.388434 32448 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:05:39,400 -     INFO - roiaware_pool3d builded success!
+W0210 19:05:39.673597 32448 reducer.cc:622] All parameters are involved in the backward pass. It is recommended to set find_unused_parameters to False to improve performance. However, if unused parameters appear in subsequent iterative training, then an error will occur. Please make it clear that in the subsequent training, there will be no parameters that are not used in the backward pass, and then set find_unused_parameters
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 66, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-10 19:25:20,650 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:25:20,651 -     INFO - Load 14357 Car database infos
+2023-02-10 19:25:20,653 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:25:20,653 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:25:20,653 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:25:20,653 -     INFO - Load 13442 Car database infos
+2023-02-10 19:25:20,653 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:25:20,672 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:25:20,672 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:25:20,672 -     INFO - Load 10520 Car database infos
+2023-02-10 19:25:20,672 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:25:20,741 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:25:20,752 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:25:20.755599 11889 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:25:20.755617 11889 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:25:21.953347 11889 tcp_utils.cc:130] Successfully connected to 127.0.1.1:47410
+*******************************
+True
+2023-02-10 19:25:26,633 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:25:29,446 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:25:31,622 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:25:33.101203 11889 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:25:33.101235 11889 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:25:33.101241 11889 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:25:33.101246 11889 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:25:33.101250 11889 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:25:33.101253 11889 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:25:33.101258 11889 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:25:33,113 -     INFO - roiaware_pool3d builded success!
+W0210 19:25:33.370924 11889 reducer.cc:622] All parameters are involved in the backward pass. It is recommended to set find_unused_parameters to False to improve performance. However, if unused parameters appear in subsequent iterative training, then an error will occur. Please make it clear that in the subsequent training, there will be no parameters that are not used in the backward pass, and then set find_unused_parameters
+*******************************
+True
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 68, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-10 19:26:45,884 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:26:45,884 -     INFO - Load 14357 Car database infos
+2023-02-10 19:26:45,886 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:26:45,887 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:26:45,887 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:26:45,887 -     INFO - Load 13442 Car database infos
+2023-02-10 19:26:45,887 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:26:45,905 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:26:45,906 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:26:45,906 -     INFO - Load 10520 Car database infos
+2023-02-10 19:26:45,906 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:26:45,975 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:26:45,985 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:26:45.989194 13023 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:26:45.989217 13023 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:26:47.196398 13023 tcp_utils.cc:130] Successfully connected to 127.0.1.1:38195
+*******************************
+True
+False
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 46, in training_step
+    print(model._layers.use_recompute)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 1144, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'IASSD' object has no attribute 'use_recompute'
+2023-02-10 19:27:32,978 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:27:32,979 -     INFO - Load 14357 Car database infos
+2023-02-10 19:27:32,981 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:27:32,981 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:27:32,981 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:27:32,981 -     INFO - Load 13442 Car database infos
+2023-02-10 19:27:32,981 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:27:33,000 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:27:33,000 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:27:33,000 -     INFO - Load 10520 Car database infos
+2023-02-10 19:27:33,000 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:27:33,068 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:27:33,079 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:27:33.082828 13762 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:27:33.082854 13762 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:27:34.277282 13762 tcp_utils.cc:130] Successfully connected to 127.0.1.1:45425
+*******************************
+True
+False
+2023-02-10 19:27:38,943 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:27:40,326 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:27:42,542 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:27:44.040477 13762 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:27:44.040511 13762 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:27:44.040517 13762 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:27:44.040521 13762 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:27:44.040525 13762 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:27:44.040529 13762 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:27:44.040534 13762 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:27:44,052 -     INFO - roiaware_pool3d builded success!
+W0210 19:27:44.319607 13762 reducer.cc:622] All parameters are involved in the backward pass. It is recommended to set find_unused_parameters to False to improve performance. However, if unused parameters appear in subsequent iterative training, then an error will occur. Please make it clear that in the subsequent training, there will be no parameters that are not used in the backward pass, and then set find_unused_parameters
+*******************************
+True
+False
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 70, in training_step
+    outputs = model(sample)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 948, in __call__
+    return self.forward(*inputs, **kwargs)
+  File "/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/fluid/dygraph/parallel.py", line 777, in forward
+    self._reducer.prepare_for_backward(list(
+RuntimeError: (PreconditionNotMet) A serious error has occurred here. Please set find_unused_parameters=True to traverse backward graph in each step to prepare reduce in advance. If you have set, There may be several reasons for this error: 1) Please note that all forward outputs derived from the module parameters must participate in the calculation of losses and subsequent gradient calculations. If not, the wrapper will hang, waiting for autograd to generate gradients for these parameters. you can use detach or stop_gradient to make the unused parameters detached from the autograd graph. 2) Used multiple forwards and one backward. You may be able to wrap multiple forwards in a model.
+  [Hint: Expected groups_need_finalize_ == false, but received groups_need_finalize_:1 != false:0.] (at /paddle/paddle/fluid/distributed/collective/reducer.cc:609)
+
+2023-02-10 19:32:57,438 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:32:57,438 -     INFO - Load 14357 Car database infos
+2023-02-10 19:32:57,441 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:32:57,441 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:32:57,441 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:32:57,441 -     INFO - Load 13442 Car database infos
+2023-02-10 19:32:57,441 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:32:57,460 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:32:57,460 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:32:57,460 -     INFO - Load 10520 Car database infos
+2023-02-10 19:32:57,460 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:32:57,528 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-136-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:32:57,538 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:32:57.542373 17288 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:32:57.542394 17288 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:32:58.732743 17288 tcp_utils.cc:107] Retry to connect to 127.0.1.1:62366 while the server is not yet listening.
+I0210 19:33:01.733094 17288 tcp_utils.cc:130] Successfully connected to 127.0.1.1:62366
+*******************************
+True
+False
+Traceback (most recent call last):
+  File "tools/train.py", line 202, in <module>
+    main(args)
+  File "tools/train.py", line 197, in main
+    trainer.train()
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/trainer.py", line 284, in train
+    output = training_step(
+  File "/home/t/polarstar/DL/Paddle3D/paddle3d/apis/pipeline.py", line 48, in training_step
+    if isinstance(model, paddle.DataParallel) /"""and hasattr(model._layers, 'use_recompute') \
+TypeError: unsupported operand type(s) for /: 'bool' and 'str'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       2023-02-10 19:42:35,111 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:42:35,112 -     INFO - Load 14357 Car database infos
+2023-02-10 19:42:35,115 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:42:35,115 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:42:35,115 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:42:35,115 -     INFO - Load 13442 Car database infos
+2023-02-10 19:42:35,115 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:42:35,136 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:42:35,136 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:42:35,136 -     INFO - Load 10520 Car database infos
+2023-02-10 19:42:35,136 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:42:35,301 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-137-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:42:35,312 -     INFO - 
+---------------Config Information---------------
+batch_size: 8
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 9280
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:42:35.317742  4716 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:42:35.317760  4716 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:42:38.403560  4716 tcp_utils.cc:130] Successfully connected to 127.0.1.1:61930
+2023-02-10 19:42:55,552 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:42:56,954 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:42:59,615 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:43:01.042693  4716 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:43:01.042722  4716 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:43:01.042727  4716 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:43:01.042732  4716 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:43:01.042737  4716 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:43:01.042740  4716 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:43:01.042744  4716 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:43:01,055 -     INFO - roiaware_pool3d builded success!
+2023-02-10 19:53:32,308 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:53:32,309 -     INFO - Load 14357 Car database infos
+2023-02-10 19:53:32,312 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:53:32,313 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:53:32,313 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:53:32,313 -     INFO - Load 13442 Car database infos
+2023-02-10 19:53:32,313 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:53:32,333 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:53:32,333 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:53:32,333 -     INFO - Load 10520 Car database infos
+2023-02-10 19:53:32,333 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:53:32,458 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-137-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:53:32,472 -     INFO - 
+---------------Config Information---------------
+batch_size: 4
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 37120
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:53:32.478332  8401 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:53:32.478358  8401 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:53:35.374639  8401 tcp_utils.cc:107] Retry to connect to 127.0.1.1:41710 while the server is not yet listening.
+I0210 19:53:38.375077  8401 tcp_utils.cc:130] Successfully connected to 127.0.1.1:41710
+2023-02-10 19:53:48,364 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:53:49,716 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:53:53,795 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:53:56.660436  8401 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:53:56.660473  8401 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:53:56.660485  8401 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:53:56.660490  8401 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:53:56.660493  8401 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:53:56.660497  8401 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:53:56.660501  8401 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:53:56,672 -     INFO - roiaware_pool3d builded success!
+
+
+--------------------------------------
+C++ Traceback (most recent call last):
+--------------------------------------
+0   phi::backends::gpu::GpuMemcpySync(void*, void const*, unsigned long, cudaMemcpyKind)
+
+----------------------
+Error Message Summary:
+----------------------
+FatalError: `Termination signal` is detected by the operating system.
+  [TimeInfo: *** Aborted at 1676030166 (unix time) try "date -d @1676030166" if you are using GNU date ***]
+  [SignalInfo: *** SIGTERM (@0x3e800002080) received by PID 8401 (TID 0x7fa56f6c0740) from PID 8320 ***]
+
+                                                                                                                                                        2023-02-10 19:59:32,232 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 19:59:32,232 -     INFO - Load 14357 Car database infos
+2023-02-10 19:59:32,235 -     INFO - Load 734 Cyclist database infos
+2023-02-10 19:59:32,236 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 19:59:32,236 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 19:59:32,236 -     INFO - Load 13442 Car database infos
+2023-02-10 19:59:32,236 -     INFO - Load 699 Cyclist database infos
+2023-02-10 19:59:32,255 -     INFO - After filtering ignored difficulty:
+2023-02-10 19:59:32,255 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 19:59:32,255 -     INFO - Load 10520 Car database infos
+2023-02-10 19:59:32,255 -     INFO - Load 580 Cyclist database infos
+2023-02-10 19:59:32,398 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-137-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 19:59:32,411 -     INFO - 
+---------------Config Information---------------
+batch_size: 6
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 37120
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 19:59:32.416765  4291 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 19:59:32.416790  4291 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 19:59:35.268460  4291 tcp_utils.cc:107] Retry to connect to 127.0.1.1:63982 while the server is not yet listening.
+I0210 19:59:38.268833  4291 tcp_utils.cc:130] Successfully connected to 127.0.1.1:63982
+2023-02-10 19:59:52,085 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 19:59:53,456 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 19:59:56,142 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 19:59:57.535686  4291 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 19:59:57.535719  4291 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 19:59:57.535725  4291 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 19:59:57.535729  4291 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 19:59:57.535733  4291 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 19:59:57.535737  4291 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 19:59:57.535741  4291 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 19:59:57,548 -     INFO - roiaware_pool3d builded success!
+                                                                                                                                                                                                                                                                                                        2023-02-10 20:05:40,396 -     INFO - Load 2207 Pedestrian database infos
+2023-02-10 20:05:40,397 -     INFO - Load 14357 Car database infos
+2023-02-10 20:05:40,400 -     INFO - Load 734 Cyclist database infos
+2023-02-10 20:05:40,400 -     INFO - After filtering min_num_points_in_box:
+2023-02-10 20:05:40,400 -     INFO - Load 2161 Pedestrian database infos
+2023-02-10 20:05:40,400 -     INFO - Load 13442 Car database infos
+2023-02-10 20:05:40,400 -     INFO - Load 699 Cyclist database infos
+2023-02-10 20:05:40,420 -     INFO - After filtering ignored difficulty:
+2023-02-10 20:05:40,420 -     INFO - Load 2066 Pedestrian database infos
+2023-02-10 20:05:40,420 -     INFO - Load 10520 Car database infos
+2023-02-10 20:05:40,420 -     INFO - Load 580 Cyclist database infos
+2023-02-10 20:05:40,576 -     INFO - 
+------------Environment Information-------------
+platform:
+    Linux-5.4.0-137-generic-x86_64-with-glibc2.10
+    gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+    Python - 3.8.0 (default, Nov  6 2019, 21:49:08)  [GCC 7.3.0]
+
+Science Toolkits:
+    cv2 - 4.5.5
+    numpy - 1.23.5
+    numba - 0.56.4
+    pandas - 1.5.3
+    pillow - 8.3.2
+    skimage - 0.19.3
+
+PaddlePaddle:
+    paddle(gpu) - 2.4.1
+    paddle3d - 1.0.0
+    paddleseg - 2.7.0
+    FLAGS_cudnn_deterministic - Not set.
+    FLAGS_cudnn_exhaustive_search - Not set.
+
+CUDA:
+    cudnn - 8201
+    nvcc - Build cuda_11.2.r11.2/compiler.29373293_0
+
+GPUs:
+    GPU 0: NVIDIA GeForce
+    GPU 1: NVIDIA GeForce
+------------------------------------------------
+2023-02-10 20:05:40,593 -     INFO - 
+---------------Config Information---------------
+batch_size: 4
+epochs: 80
+lr_scheduler:
+  div_factor: 10
+  lr_max: 0.01
+  moms:
+  - 0.95
+  - 0.85
+  pct_start: 0.4
+  total_step: 37120
+  type: OneCycle
+model:
+  backbone:
+    aggregation_mlps:
+    - - 64
+    - - 128
+    - - 256
+    - - 256
+    - []
+    - - 512
+    confidence_mlps:
+    - []
+    - - 128
+    - - 256
+    - []
+    - []
+    - []
+    ctr_index:
+    - -1
+    - -1
+    - -1
+    - -1
+    - -1
+    - 5
+    dilated_group:
+    - false
+    - false
+    - false
+    - false
+    - false
+    - false
+    input_channel: 4
+    layer_input:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 3
+    layer_types:
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - SA_Layer
+    - Vote_Layer
+    - SA_Layer
+    max_translate_range:
+    - 3.0
+    - 3.0
+    - 2.0
+    mlps:
+    - - - 16
+        - 16
+        - 32
+      - - 32
+        - 32
+        - 64
+    - - - 64
+        - 64
+        - 128
+      - - 64
+        - 96
+        - 128
+    - - - 128
+        - 128
+        - 256
+      - - 128
+        - 256
+        - 256
+    - []
+    - - 128
+    - - - 256
+        - 256
+        - 512
+      - - 256
+        - 512
+        - 1024
+    npoint_list:
+    - 4096
+    - 1024
+    - 512
+    - 256
+    - null
+    - 256
+    nsample_list:
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - - 16
+      - 32
+    - []
+    - []
+    - - 16
+      - 32
+    num_classes: 3
+    radius_list:
+    - - 0.2
+      - 0.8
+    - - 0.8
+      - 1.6
+    - - 1.6
+      - 4.8
+    - []
+    - []
+    - - 4.8
+      - 6.4
+    sample_method_list: &id001
+    - D-FPS
+    - D-FPS
+    - ctr_aware
+    - ctr_aware
+    - null
+    - null
+    type: IASSD_Backbone
+  head:
+    cls_fc:
+    - 256
+    - 256
+    input_channel: 512
+    loss_config:
+      centerness_regularization: true
+      centerness_regularization_sa: true
+      corner_loss_regularization: true
+      loss_cls: WeightedClassificationLoss
+      loss_ins: WeightedClassificationLoss
+      loss_reg: WeightedSmoothL1Loss
+      loss_weight:
+        code_weights:
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        - 1.0
+        corner_weight: 1.0
+        dir_weight: 0.2
+        ins_aware_weight:
+        - 0
+        - 1.0
+        - 1.0
+        point_box_weight: 1.0
+        point_cls_weight: 1.0
+        vote_weight: 1.0
+      sample_method_list: *id001
+    num_classes: 3
+    reg_fc:
+    - 256
+    - 256
+    target_config:
+      box_coder_config:
+        angle_bin_num: 12
+        mean_size:
+        - - 3.9
+          - 1.6
+          - 1.56
+        - - 0.8
+          - 0.6
+          - 1.73
+        - - 1.76
+          - 0.6
+          - 1.73
+        use_mean_size: true
+      extra_width:
+      - 1.0
+      - 1.0
+      - 1.0
+      gt_extra_width:
+      - 0.2
+      - 0.2
+      - 0.2
+    type: IASSD_Head
+  post_process_cfg:
+    nms_config:
+      nms_post_maxsize: 500
+      nms_pre_maxsize: 4096
+      nms_thresh: 0.01
+    score_thresh: 0.1
+  type: IASSD
+optimizer:
+  beta1: 0.9
+  beta2: 0.99
+  clip_grad_by_norm: 10.0
+  learning_rate: 0.01
+  type: AdamWOnecycle
+  weight_decay: 0.01
+train_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: train
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - class_names:
+    - Car
+    - Pedestrian
+    - Cyclist
+    database_anno_path: datasets/KITTI/kitti_train_gt_database/anno_info_train.pkl
+    database_root: datasets/KITTI
+    ignored_difficulty:
+    - -1
+    max_num_samples_per_class:
+      Car: 20
+      Cyclist: 15
+      Pedestrian: 15
+    min_num_points_in_box_per_class:
+      Car: 5
+      Cyclist: 5
+      Pedestrian: 5
+    type: SamplingDatabase
+  - type: RandomVerticalFlip
+  - max_rot: 0.78539816
+    min_rot: -0.78539816
+    type: GlobalRotate
+  - max_scale: 1.05
+    min_scale: 0.95
+    type: GlobalScale
+  - point_cloud_range: &id002
+    - 0
+    - -40
+    - -3
+    - 70.4
+    - 40
+    - 1
+    type: FilterBBoxOutsideRange
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  - type: ShufflePoint
+  - type: ConvertBoxFormat
+  type: KittiPCDataset
+  use_road_plane: false
+val_dataset:
+  class_names:
+  - Car
+  - Pedestrian
+  - Cyclist
+  dataset_root: datasets/KITTI
+  mode: val
+  transforms:
+  - dim: 4
+    type: LoadPointCloud
+    use_dim: 4
+  - type: RemoveCameraInvisiblePointsKITTIV2
+  - point_cloud_range: *id002
+    type: FilterPointOutsideRange
+  - num_points: 16384
+    type: SamplePoint
+  type: KittiPCDataset
+------------------------------------------------
+W0210 20:05:40.598616  4100 gpu_resources.cc:61] Please NOTE: device: 1, GPU Compute Capability: 8.6, Driver API Version: 11.4, Runtime API Version: 11.2
+W0210 20:05:40.598636  4100 gpu_resources.cc:91] device: 1, cuDNN Version: 8.2.
+I0210 20:05:43.469022  4100 tcp_utils.cc:107] Retry to connect to 127.0.1.1:45784 while the server is not yet listening.
+I0210 20:05:46.469556  4100 tcp_utils.cc:130] Successfully connected to 127.0.1.1:45784
+2023-02-10 20:05:56,211 -  WARNING - No custom op pointnet2_ops found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+2023-02-10 20:05:57,588 -     INFO - pointnet2_ops builded success!
+/home/t/anaconda3/envs/paddle/lib/python3.8/site-packages/paddle/nn/layer/norm.py:711: UserWarning: When training, we now always track global mean and variance.
+  warnings.warn(
+2023-02-10 20:06:01,663 -  WARNING - No custom op roiaware_pool3d found, try JIT build
+Compiling user custom op, it will cost a few seconds.....
+W0210 20:06:03.057054  4100 custom_operator.cc:723] Operator (farthest_point_sample) has been registered.
+W0210 20:06:03.057085  4100 custom_operator.cc:723] Operator (grouping_operation_stack) has been registered.
+W0210 20:06:03.057091  4100 custom_operator.cc:723] Operator (ball_query_stack) has been registered.
+W0210 20:06:03.057096  4100 custom_operator.cc:723] Operator (voxel_query_wrapper) has been registered.
+W0210 20:06:03.057101  4100 custom_operator.cc:723] Operator (grouping_operation_batch) has been registered.
+W0210 20:06:03.057106  4100 custom_operator.cc:723] Operator (ball_query_batch) has been registered.
+W0210 20:06:03.057109  4100 custom_operator.cc:723] Operator (gather_operation) has been registered.
+2023-02-10 20:06:03,069 -     INFO - roiaware_pool3d builded success!
