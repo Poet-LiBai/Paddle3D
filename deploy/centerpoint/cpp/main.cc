@@ -204,11 +204,12 @@ bool parse_result(const std::vector<float> &box3d_lidar,
                   const std::vector<float> &scores) {
   int num_bbox3d = scores.size();
   int bbox3d_dims = box3d_lidar.size() / num_bbox3d;
+  std::cout << "score.size()" << num_bbox3d << " box3d_lidar.size()" << box3d_lidar.size() << std::endl;
   for (size_t box_idx = 0; box_idx != num_bbox3d; ++box_idx) {
     // filter fake results:  score = -1
-    if (scores[box_idx] < 0) {
-      continue;
-    }
+    // if (scores[box_idx] < 0) {
+    //   continue;
+    // }
     LOG(INFO) << "Score: " << scores[box_idx]
               << " Label: " << label_preds[box_idx] << " ";
     if (bbox3d_dims == 9) {
@@ -270,10 +271,12 @@ int main(int argc, char *argv[]) {
   std::vector<float> box3d_lidar;
   std::vector<int64_t> label_preds;
   std::vector<float> scores;
+  std::cout << "11111111111111111" << std::endl;
   run(predictor.get(), points_shape, points_data, &box3d_lidar, &label_preds,
       &scores);
-
+  std::cout << "22222222222222222" << "box3d_lidar size" << box3d_lidar.size() << std::endl;
   parse_result(box3d_lidar, label_preds, scores);
+  std::cout << "33333333333333333" << std::endl;
 
   return 0;
 }

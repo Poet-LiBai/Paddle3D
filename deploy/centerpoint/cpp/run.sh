@@ -1,11 +1,11 @@
 export LD_LIBRARY_PATH=/usr/local/paddle_inference/third_party/install/paddle2onnx/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 export LD_LIBRARY_PATH=/usr/local/paddle_inference/third_party/install/onnxruntime/lib:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 export LD_LIBRARY_PATH=/usr/local/paddle_inference/third_party/install/mkldnn/lib:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-export LD_LIBRARY_PATH=/home/t/polarstar/DL/Paddle3D/deploy/iassd/cpp/build:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 export LD_LIBRARY_PATH=/usr/local/tensorrt/lib:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export LD_LIBRARY_PATH=/home/t/polarstar/DL/Paddle3D/deploy/centerpoint/cpp/build:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
-MODEL_DIR=/home/t/polarstar/DL/Paddle3D/offical_model/iassd/iassd
-POINT_CLOUD=/data/polarstar/kitti/training/velodyne/000005.bin
+MODEL_DIR=/home/t/polarstar/DL/Paddle3D/offical_model/centerpoint/centerpoint_pillars_016voxel_kitti/centerpoint
+POINT_CLOUD=/data/polarstar/kitti/training/velodyne/000002.bin
 
 #直接运行
 ./build/main --model_file ${MODEL_DIR}.pdmodel --params_file ${MODEL_DIR}.pdiparams  --lidar_file ${POINT_CLOUD} --gpu_id 1

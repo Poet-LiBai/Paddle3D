@@ -1,0 +1,3 @@
+125.6 GiB
+Intel® Core™ i9-9900K CPU @ 3.60GHz × 16
+NVIDIA GeForce RTX 3060/PCIe/SSE2

@@ -22,11 +22,11 @@ WITH_MKL=ON
 WITH_GPU=ON
 USE_TENSORRT=ON
 
-LIB_DIR=/centerpoint/two_three/Paddle/build_apollo/paddle_inference_install_dir/
+LIB_DIR=/usr/local/paddle_inference
 CUDNN_LIB=/usr/lib/x86_64-linux-gnu
 CUDA_LIB=/usr/local/cuda/lib64
-TENSORRT_ROOT=/centerpoint/two_three/Paddle/TensorRT-8.2.5.1
-CUSTOM_OPERATOR_FILES="custom_ops/voxelize_op.cu;custom_ops/voxelize_op.cc;custom_ops/iou3d_nms_kernel.cu;custom_ops/postprocess.cc;custom_ops/postprocess.cu"
+TENSORRT_ROOT=/usr/local/tensorrt
+CUSTOM_OPERATOR_FILES="custom_ops/hard_voxelize.cu;custom_ops/hard_voxelize.cc;custom_ops/iou3d_nms_kernel.cu;custom_ops/postprocess.cc;custom_ops/postprocess.cu"
 
 
 cmake .. -DPADDLE_LIB=${LIB_DIR} \
